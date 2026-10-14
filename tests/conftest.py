@@ -7,6 +7,11 @@ from fastapi.testclient import TestClient
 from app.main import create_app
 
 
+def pytest_addoption(parser):
+    # Registered at the root so a single "pytest tests" run also accepts --headed.
+    parser.addoption("--headed", action="store_true", help="Show the E2E browser window")
+
+
 @pytest.fixture
 def database_path(tmp_path: Path) -> Path:
     return tmp_path / "test-cars.db"

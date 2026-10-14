@@ -14,6 +14,14 @@ from app.main import create_app
 
 
 def pytest_addoption(parser):
+    """Register --headed even when only this directory is collected.
+
+    The same option is registered in tests/conftest.py, so it is also available
+    for a single "pytest tests" run. Registering it twice is an error, so this
+    hook defers whenever the root conftest already added it.
+    """
+    if any(action.dest == "headed" for action in parser._anonymous.options):
+        return
     parser.addoption("--headed", action="store_true", help="Show the E2E browser window")
 
 
